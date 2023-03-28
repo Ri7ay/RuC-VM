@@ -45,27 +45,27 @@
 #include "instuctions.h"
 
 
-#define MAXREPRTAB	10000
-#define MAXIDENTAB	10000
-#define MAXMODETAB	1000
-#define FUNCSIZE	100
-#define MAXSTRINGL	128
-#define INIPROSIZE	100
+#define MAXREPRTAB 10000
+#define MAXIDENTAB 10000
+#define MAXMODETAB 1000
+#define FUNCSIZE   100
+#define MAXSTRINGL 128
+#define INIPROSIZE 100
 
-#define MAXMEMSIZE		100000
-#define NUMOFTHREADS	10
-#define MAXMEMTHREAD	MAXMEMSIZE / NUMOFTHREADS
+#define MAXMEMSIZE	 100000
+#define NUMOFTHREADS 10
+#define MAXMEMTHREAD MAXMEMSIZE / NUMOFTHREADS
 
 
 enum TYPE
 {
-	TYPE_VOID			= -6,
-	TYPE_FLOATING		= -3,
+	TYPE_VOID = -6,
+	TYPE_FLOATING = -3,
 	TYPE_CHAR,
 	TYPE_INTEGER,
 
-	TYPE_STRUCTURE		= 1002,
-	TYPE_ARRAY			= 1004,
+	TYPE_STRUCTURE = 1002,
+	TYPE_ARRAY = 1004,
 };
 
 
@@ -98,9 +98,10 @@ void *interpreter(void *);
 
 int szof(int type)
 {
-	return modetab[type] == TYPE_ARRAY
-			   ? 1
-			   : type == TYPE_FLOATING ? 2 : (type > 0 && modetab[type] == TYPE_STRUCTURE) ? modetab[type + 1] : 1;
+	return modetab[type] == TYPE_ARRAY					   ? 1
+		   : type == TYPE_FLOATING						   ? 2
+		   : (type > 0 && modetab[type] == TYPE_STRUCTURE) ? modetab[type + 1]
+														   : 1;
 }
 
 void runtimeerr(int e, int i, int r)
@@ -387,6 +388,7 @@ int dsp(int di, int l)
 
 void *interpreter(void *pcPnt)
 {
+	printf("--------> interpreter\n");
 	int aux[] = { 3, 1, 2, 3 };
 	int l;
 	int x;
@@ -1439,6 +1441,7 @@ void *interpreter(void *pcPnt)
 			break;
 			case IC_COPY0ST_ASSIGN:
 			{
+				printf("----> IC_COPY0ST_ASSIGN\n");
 				di = dsp(mem[pc++], l);
 				len = mem[pc++];
 				x -= len;
@@ -1451,6 +1454,7 @@ void *interpreter(void *pcPnt)
 			break;
 			case IC_COPY1ST_ASSIGN:
 			{
+				printf("----> IC_COPY1ST_ASSIGN\n");
 				len = mem[pc++];
 				x -= len;
 				di = mem[x--];
@@ -1463,6 +1467,7 @@ void *interpreter(void *pcPnt)
 			break;
 			case IC_COPYST:
 			{
+				printf("----> IC_COPYST\n");
 				di = mem[pc++];		// смещ поля
 				len = mem[pc++];	// длина поля
 				x -= mem[pc++] + 1; // длина всей структуры
@@ -1522,6 +1527,7 @@ void *interpreter(void *pcPnt)
 				break;
 
 			case IC_ASSIGN:
+				printf("--------> IC_ASSIGN\n");
 				mem[dsp(mem[pc++], l)] = mem[x];
 				break;
 			case IC_REM_ASSIGN:
@@ -1586,6 +1592,7 @@ void *interpreter(void *pcPnt)
 			break;
 
 			case IC_ASSIGN_V:
+				printf("IC_ASSIGN_V: %d\n", mem[x]);
 				mem[dsp(mem[pc++], l)] = mem[x--];
 				break;
 			case IC_REM_ASSIGN_V:
